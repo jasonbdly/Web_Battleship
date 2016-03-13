@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Web Battleship by jasonbdly</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Web Battleship</h1>
+          <h2></h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/jasonbdly/Web_Battleship/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/jasonbdly/Web_Battleship/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/jasonbdly/Web_Battleship" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="web-battleship-prototype-game" class="anchor" href="#web-battleship-prototype-game" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Web Battleship Prototype Game</h1>
+
+<h2>
+<a id="game-modules" class="anchor" href="#game-modules" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Game Modules</h2>
+
+<p>The game logic is divided into three central modules. 
+Look for any function definitions with an uppercase name to find them in the code.
+They are the following:
+1. BattleshipGame
+  *Controls most of the logic in the game.
+  *Responsible for handling user interactions.
+  *Determines the next state of the game based on info from the user.
+2. PrimaryDisplay
+  *Controls the what is displayed in the primary display.
+  *Provides simple interfaces so that an instance of BattleshipGame can communicate with it.
+     (attackAtCell(x, y), areAllShipsDestroyed())
+2. TrackingDisplay
+  *Controls the what is displayed in the tracking display.
+  *Provides simple interfaces so that an instance of BattleshipGame can communicate with it.
+     (attackAtCell(x, y), areAllShipsDestroyed())</p>
+
+<h2>
+<a id="randomly-placing-ships" class="anchor" href="#randomly-placing-ships" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Randomly Placing Ships</h2>
+
+<p>The approach used here to randomly place ships is pretty much brute force, except that ships are placed one at a time, rather than repeatedly regenerating the positions of each ship until they all fit (which would be astronomically less performant than even this approach).</p>
+
+<h3>
+<a id="steps" class="anchor" href="#steps" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Steps</h3>
+
+<ol>
+<li>Choose a random orientation, and a random position for each of the types of ships.</li>
+<li>Iterate through the list of ships, until you no longer find any collisions.</li>
+<li>When a collision is found, nudge that ship in a random direction and check it's new position.</li>
+<li>Repeat the previous step until no more collisions are found.</li>
+</ol>
+
+<p>At the end of these steps, you should have a grid with ship pieces placed randomly throughout, with no overlap.</p>
+
+<h2>
+<a id="detecting-collisions-between-ships" class="anchor" href="#detecting-collisions-between-ships" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Detecting Collisions Between Ships</h2>
+
+<p>Before going over how to determine if two ships are colliding, here are the definitions of any words I'll be using in the explaination.
+The "width" of a ship will refer to the number of grid cells the ship takes up in a horizontal direction, taking its orientation into account.
+The "height" of a ship is similar to the "width", except that it applies to its vertical direction.
+The "bounds" of a ship collision refers to the smallest rectangle that includes the ships involved in the collision, which only applies to two ships at a time in this case.</p>
+
+<p>Keep a game grid in mind, pick any 2 battleship pieces that could show up on the board, and place those pieces in such a way that they are colliding. Observe the "bounds" of the collision at this point, then move the pieces into another collision without rotating each piece, paying attention to the "bounds" of the collision after moving the pieces as well. You should find that the bounds of the collision at both points have exactly the same dimensions. We'll refer to these bounds as the "mimimum bounds" for a set of ships. These dimensions also happen to be the width of the "widest" ship and the height of the "highest" ship.
+You should also find that there is no way to arrange the pieces such that the collision bounds are equal to the "mimimum bounds" without them colliding. This is what we can use to quickly detect collisions between ships.
+Some simple arithmatic and conditional statements can be used to determine the current bounds for a given pair of ships, and the minimum bounds can be determined even more quickly.</p>
+
+<p>In summary, if the current bounds of any two ships are equal to the minimum bounds of those same two ships then they must be colliding.
+NOTE: This approach does not account for ships with the same orientation that happen to be residing in the same row or column. However, those can be caught by comparing the area of the current bounds with the total area of the ship pieces. The only case in which the total area would be less than the expected ship area is if the ships are colliding.</p>
+        </section>
+
+        <footer>
+          Web Battleship is maintained by <a href="https://github.com/jasonbdly">jasonbdly</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
