@@ -7,8 +7,8 @@
 		var primaryDisplayElem = $("#primaryDisplay"),
 			trackingDisplayElem = $("#trackingDisplay");
 
-		primaryDisplayElem.attr("width", primaryDisplayElem.width()).attr("height", primaryDisplayElem.height());
-		trackingDisplayElem.attr("width", trackingDisplayElem.width()).attr("height", trackingDisplayElem.height());
+		//primaryDisplayElem.attr("width", primaryDisplayElem.width()).attr("height", primaryDisplayElem.height());
+		//trackingDisplayElem.attr("width", trackingDisplayElem.width()).attr("height", trackingDisplayElem.height());
 
 		//Create a new instance of the PrimaryDisplay class, passing it the canvas element for the
 		//primary display.
@@ -21,6 +21,7 @@
 		//Create a new game instance, passing it the PrimaryDisplay instance and the TrackingDisplay instance it
 		//needs to communicate with while the game is running.
 		var game = new BattleshipGame(primaryDisplay, trackingDisplay);
+		window.game = game;
 
 		//Start the game
 		game.start();
@@ -157,6 +158,14 @@
 		this.drawContext = $display[0].getContext('2d');
 		this.width = $display.width();
 		this.height = $display.height();
+		if (this.width < this.height) {
+			this.height = this.width;
+			$display.height(this.height);
+		} else {
+			this.width = this.height;
+			$display.width(this.width);
+		}
+		$display.attr("width", this.width).attr("height", this.height);
 		this.hasInit = false;
 	}
 
@@ -205,8 +214,8 @@
 		render: function() {
 			if (this.hasInit) {
 				this.drawContext.clearRect(0, 0, this.width, this.height);
-				this.drawContext.font = "12px arial";
-				this.drawContext.fillText("Primary Display", this.width / 2 - 35, 15);
+				this.drawContext.font = "13px arial";
+				this.drawContext.fillText("Primary Display", this.width / 2 - 50, 15);
 				drawGrid(this.drawContext, 0, 0, this.width, this.height, 20, "#1C6BA0", "black");
 				drawGridContents(this.drawContext, 0, 0, this.width, this.height, 20, this.gridState, this.gridData);
 			}
@@ -219,6 +228,14 @@
 		this.drawContext = $display[0].getContext('2d');
 		this.width = $display.width();
 		this.height = $display.height();
+		if (this.width < this.height) {
+			this.height = this.width;
+			$display.height(this.height);
+		} else {
+			this.width = this.height;
+			$display.width(this.width);
+		}
+		$display.attr("width", this.width).attr("height", this.height);
 		this.gridState = [];
 		this.gridData = [];
 		this.hasInit = false;
@@ -244,8 +261,8 @@
 		render: function() {
 			if (this.hasInit) {
 				this.drawContext.clearRect(0, 0, this.width, this.height);
-				this.drawContext.font = "12px arial";
-				this.drawContext.fillText("Tracking Display", this.width / 2 - 35, 15);
+				this.drawContext.font = "13px arial";
+				this.drawContext.fillText("Tracking Display", this.width / 2 - 50, 15);
 				drawGrid(this.drawContext, 0, 0, this.width, this.height, 20, "black", "green");
 				drawGridContents(this.drawContext, 0, 0, this.width, this.height, 20, this.gridState, this.gridData);
 			}
@@ -442,7 +459,7 @@
 		if (ship1.id !== ship2.id) {
 			var minBounds = getMinBounds(ship1, ship2);
 			var currentBounds = getCurrentBounds(ship1, ship2);
-			if (minBounds[0] === currentBounds[0] && minBounds[1] === currentBounds[1]) {
+			if (minBounds[0] === currentBounds[0] && minBounds[1] === currentBounds[1] || (currentBounds[0] * currentBounds[1] < ship1.length + ship2.length)) {
 				return true;
 			} else {
 				return false;
